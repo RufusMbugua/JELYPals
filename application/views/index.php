@@ -8,51 +8,94 @@
 		<!-- Attach JavaScript files -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js" charset="utf-8"></script>
 		<script src="<?php echo base_url()?>js/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
+ <script>
+	window.onload = function() {
+		var canvas = document.getElementById("myCanvas");
+		var context = canvas.getContext("2d");
+		var centerX = canvas.width / 2;
+		var centerY = canvas.height / 2;
+		var radius = 70;
 
+		context.beginPath();
+		context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+		context.fillStyle = "purple";
+		context.fill();
+		context.lineWidth = 5;
+		context.strokeStyle = "green";
+		context.stroke();
+		context.textAlign = "center";
+		context.fillStyle = "#000000";
+		context.fillText("JELYPals", centerX, centerY);
+	};
+
+    </script>
 		<title><?php echo $title; ?></title>
 	</head>
 
 	<body>
 
 		<header>
-			<section class="banner">
-				<section class="user">
-					<section class="details">
-						Signed in as:
-						Account Settings Log Out
-					</section>
-				</section>
+			<canvas id="myCanvas">
+				
+			</canvas>
+			<section class="welcome">
+				Welcome back User.
+				New Notes waiting for you from PenPal.
 			</section>
-			<nav>
-				<ul>
-					<li>
-						<a>Home</a>
-					</li>
-					<li>
-						<a>Info</a>
-					</li>
-					<li>
-						<a>About</a>
-					</li>
-					<li>
-						<a>Contact Us</a>
-					</li>
-				</ul>
-				<!--<section class="search">
-					<form>
-						<input type="search" placeholder="Search Here..."/
-					</form>
-				</section> -->
-			</nav>
+			<section class="right-side">
+			<section class="search">
+				<input type="search" placeholder="Search Here"/>
+			</section>
+			<section class="options">
+				<select>
+					<option>Notes</option>
+					<option>MyPad</option>
+					<option>PenPal's Pad</option>
+					<option>Post Note</option>
+				</select>
+				<select>
+					<option>Messages</option>
+					<option>My Messages</option>
+					<option>Send Message</option>
+				</select>
+			</section>
+			</section>
+			
 		</header>
-		<section class="content"></section>
-		<footer>
-			<section class="social">
-				<img src="<?php echo base_url(); ?>images/social/facebook.png"  />
-				<img src="<?php echo base_url(); ?>images/social/twitter.png"/>
-				<img src="<?php echo base_url(); ?>images/social/google.png" />
-				<img src="<?php echo base_url(); ?>images/social/linkedin.png"/>
+		<section class="content">
+			<section class="notes-mini">
+				
 			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+		</section>
+		<footer>
+			
 		</footer>
 	
 	</body>
