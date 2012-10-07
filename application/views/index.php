@@ -23,9 +23,12 @@
 		context.lineWidth = 5;
 		context.strokeStyle = "green";
 		context.stroke();
+		context.font="2em Quicksand";
 		context.textAlign = "center";
 		context.fillStyle = "#000000";
-		context.fillText("JELYPals", centerX, centerY);
+		context.fillText("JELY", centerX, centerY);
+		context.font="1.2em Quicksand";
+		context.fillText("Pals",centerX,centerY+20);
 	};
 
     </script>
@@ -53,7 +56,7 @@
 					<option>PenPal's Pad</option>
 					<option>Post Note</option>
 				</select>
-				<select>
+				<select style="float:right">
 					<option>Messages</option>
 					<option>My Messages</option>
 					<option>Send Message</option>
@@ -63,6 +66,36 @@
 			
 		</header>
 		<section class="content">
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>
+			<section class="notes-mini">
+				
+			</section>	
 			<section class="notes-mini">
 				
 			</section>
