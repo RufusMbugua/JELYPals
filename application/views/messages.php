@@ -33,7 +33,16 @@
 	
 	
 $(document).ready(function() {
-	
+	$('.message h3').click(function() {
+		$(".message").animate({
+			height : '100%'
+		});
+	});
+	$('canvas').click(function() {
+		$(".message").animate({
+			height : '10%'
+		});
+	});
 });
     </script>
 		<title><?php echo $title; ?></title>

@@ -14,6 +14,13 @@ header {
 	width: 70%;
 	margin-bottom:4em;
 }
+
+.within{
+	width:70%;
+	height:60%;
+	margin:auto;
+	margin-top:5%;
+}
 .banner {
 	height: 70%;
 	width: 100%;
@@ -43,6 +50,8 @@ nav {
 	margin-left:10px;
 }
 footer {
+	color:white;
+	padding:1%;
 	bottom: 0;
 	height: 20%;
 	width: 100%;
@@ -51,12 +60,11 @@ footer {
 	box-shadow: inset 0px 2px 5px 1px #000;
 }
 .content {
-	margin: auto;
-	margin-top: 40px;
+	float:left;
 	background-image: url('../images/back.jpg');
-	height: 40%;
+	height: 60%;
 	width: 70%;
-	padding:2% 2% 2% 3%;
+	padding:1% 1% 1% 2%;
 	border-radius: 5px;
 	box-shadow: 0 0.5px 1px 0.6px #000;
 	-moz-box-shadow: 0 0.5px 6px 1px #000;
@@ -64,6 +72,18 @@ footer {
 	-o-box-shadow: 0 0.5px 1px 0.6px #000;
 	margin-bottom:4em;
 	overflow:auto;
+}
+.right-menu{
+	float:right;
+	width:20%;
+	height:60%;
+	border-radius: 5px;
+	padding:1% 1% 1% 2%;
+	box-shadow: 0 0.5px 1px 0.6px #000;
+	-moz-box-shadow: 0 0.5px 6px 1px #000;
+	-webkit-box-shadow: 0 1px 5px 0 #000;
+	-o-box-shadow: 0 0.5px 1px 0.6px #000;
+	
 }
 nav a {
 	margin-top: 10px;
@@ -141,7 +161,7 @@ select{
  *  Messaging
  * */
 .notes-mini{
-	width:17.5%;
+	width:17%;
 	margin-right:2%;
 	display:inline-block;
 	height:50%;
@@ -159,3 +179,24 @@ select{
 	padding:0.5%;
 }
 
+/*
+ * Login
+ */
+.login{
+	width:40%;
+	margin:auto;
+	padding:4%;
+} 
+
+.login input[type=text],.login input[type=password]{
+	width:100%;
+	padding:2%;
+}
+.login h3{
+	margin:0;
+	border-bottom:1px solid #666;
+	padding-bottom:4%;
+}
+.login .fields{
+	padding:5%;
+}
