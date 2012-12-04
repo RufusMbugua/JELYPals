@@ -16,7 +16,7 @@ class C_Front extends CI_Controller {
 		$this -> load -> helper(array('form', 'url'));
 		$data['title'] = "Login";
 		$data['viewName'] = "Login";
-		$this -> load -> view('login', $data);
+		$this -> load -> view('template', $data);
 	}
 
 	public function messages() {
@@ -25,8 +25,12 @@ class C_Front extends CI_Controller {
 	}//End of messages file
 
 	public function home() {
+		//User List
+		$this -> load -> model('m_users');
+		$data['users'] = $this -> m_users -> viewRecords();
 		$data['title'] = 'Home';
-		$this -> load -> view('home', $data);
+		$data['viewName'] = "Home";
+		$this -> load -> view('template', $data);
 	}//End of home file
 
 }

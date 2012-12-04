@@ -1,92 +1,174 @@
 <?php
+if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
+/**
+ *model to SystemUser entity
+ */
+use application\models\Entities\E_Jely_Users;
 
-class M_Users extends CI_Model {
+class M_Users extends MY_Model {
+	var $isUser, $email, $usersRights, $affiliation;
+	var $id, $attr, $frags, $elements, $theIds, $noOfInserts, $batchSize, $users;
 
 	function __construct() {
 		parent::__construct();
+		$this -> isUser = 'false';
+		$this -> email = '';
+		$this -> usersRights = '';
+		$this -> affiliation = '';
+		$this -> users = '';
 	}
 
-	// --------------------------------------------------------------------
+	function getUser() {
+		$s = microtime(true);
+		/*mark the timestamp at the beginning of the transaction*/
 
-	/**
-	 * function SaveForm()
-	 *
-	 * insert form data
-	 * @param $form_data - array
-	 * @return Bool - TRUE or FALSE
-	 */
-	function loginUser($username, $password) {
-		$this -> db -> select('jelyUserID, jelyUserSurname,jelyUserRole, jelyUserSecretSalt');
-		$this -> db -> from('jely_users');
-		$this -> db -> where('jelyUsername = ' . "'" . $username . "'");
-		$this -> db -> where('jelyUserSecretSalt = ' . "'" . sha1($password) . "'");
-		$this -> db -> limit(1);
+		if ($this -> input -> post()) {//check if a post was made
 
-		$query = $this -> db -> get();
-
-		if ($query -> num_rows() == 1) {
-			return $query -> result();
-		} else {
-			return false;
-
-		}
-	}
-
-	function SaveForm($form_data) {
-		$this -> db -> insert('jely_users', $form_data);
-
-		if ($this -> db -> affected_rows() == '1') {
-			return TRUE;
-		}
-
-		return FALSE;
-	}
-
-	function Saveprofile($form_data) {
-		$this -> db -> insert('jely_user_profile', $form_data);
-
-		if ($this -> db -> affected_rows() == '1') {
-			return TRUE;
-		}
-
-		return FALSE;
-	}
-
-	function getusers($type) {
-		$usersquery = $this -> db -> get_where('jely_users', array('jelyUserRole' => $type));
-
-		if ($usersquery -> num_rows() > 0) {
-			foreach ($usersquery->result() as $row) {
-				$data[] = $row;
+			//Working with an object of the entity
+			$users = $this -> em -> getRepository('models\Entities\E_Jely_Users') -> findOneBy(array('jelyUsername' => $this -> input -> post('username'), 'jelyUserSecret' => $this -> input -> post('password')));
+			if ($users) {
+				$this -> username = $users -> getJelyUsername();
+				$this -> userRights = $users -> getJelyUserRole();
+				return $this -> isUser = 'true';
 			}
-			return $data;
-		}
+
+			//test a device by users
+
+		}//close the this->input->post
+		$e = microtime(true);
+		$this -> executionTime = round($e - $s, '4');
+		//return $this -> isUser = 'true';
+	}/*end of getUser()*/
+
+	function addRecord() {
+		$s = microtime(true);
+		/*mark the timestamp at the beginning of the transaction*/
+
+		if ($this -> input -> post()) {//check if a post was made
+
+			$this -> elements = array();
+			$this -> theIds = array();
+			foreach ($this -> input -> post() as $key => $val) {//For every posted values
+				//print(($key." ".$val)).'<br \>';
+
+				//check if posted value is among the cloned ones
+				if (!strpos("_", $key)) {//useful to keep all the  non-cloned elements in the loop
+					$key = $key . "_1";
+				}
+				//we separate the attribute name from the number
+
+				$this -> frags = explode("_", $key);
+
+				$this -> id = $this -> frags[1];
+				// the id
+
+				$this -> attr = $this -> frags[0];
+				//the attribute name
+
+				$this -> theIds[$this -> attr] = $this -> id;
+				//print($this->attr."  ".$this->id."  ".$val).'<br />';
+
+				if (!empty($val))
+					//We then store the value of this attribute for this element.
+					$this -> elements[$this -> id][$this -> attr] = htmlentities($val);
+
+			}//close foreach($_POST)
+
+			//exit;
+
+			//get the highest value of the array that will control the number of inserts to be done
+			$this -> noOfInsertsBatch = max($this -> theIds);
+
+			//factory names are set since this is an external audit and hence the session variable:affiliation can't be used
+
+			/*method defined in MY_Model*/
+
+			for ($i = 1; $i <= $this -> noOfInsertsBatch; ++$i) {
+
+				$this -> theForm = new \models\Entities\E_Jely_Users();
+				//create an object of the model
+
+				/*timestamp option*/
+				//$this -> theForm -> setDates($this->elements[$i]['visitDate']);;/*entry option*/
+				$this -> theForm -> setFirstName($this -> input -> post('firstName'));
+				$this -> theForm -> setLastName($this -> input -> post('otherNames'));
+				//$this -> theForm -> setDateOfBirth($this -> input -> post('dateofBirth'));
+				$this -> theForm -> setEmail($this -> input -> post('email'));
+				$this -> theForm -> setPhoneNumber($this -> input -> post('telephone'));
+				//$this -> theForm -> setStartDate($this -> input -> post('startDate'));
+				//$this -> theForm -> setFinishDate($this -> input -> post('finishDate'));
+				$this -> theForm -> setNameOfSchool($this -> input -> post('nameOfSchool'));
+				$this -> theForm -> setResidence($this -> input -> post('residence'));
+				$this -> theForm -> setNameOfcourse($this -> input -> post('nameOfCourse'));
+				//$this -> theForm -> setYearOfStudy($this -> input -> post('yearOfStudy'));
+
+				$this -> em -> persist($this -> theForm);
+
+				//now do a batched insert, default at 5
+				$this -> batchSize = 5;
+				if ($i % $this -> batchSize == 0) {
+					try {
+
+						$this -> em -> flush();
+						$this -> em -> clear();
+						//detaches all objects from doctrine
+					} catch(Exception $ex) {
+						die($ex -> getMessage());
+						/*display users friendly message*/
+
+					}//end of catch
+
+				} else if ($i < $this -> batchSize || $i > $this -> batchSize || $i == $this -> noOfInsertsBatch && $this -> noOfInsertsBatch - $i < $this -> batchSize) {
+					//total records less than a batch, insert all of them
+					try {
+
+						$this -> em -> flush();
+						$this -> em -> clear();
+						//detactes all objects from doctrine
+					} catch(Exception $ex) {
+						die($ex -> getMessage());
+						/*display users friendly message*/
+
+					}//end of catch
+
+				}
+				//end of batch condition
+
+			} //end of innner loop
+		}//close the this->input->post
+		$e = microtime(true);
+		$this -> executionTime = round($e - $s, '4');
+		$this -> rowsInserted = $this -> noOfInsertsBatch;
+		return $this -> response = 'ok';
+
 	}
 
-	function getprofile($id) {
-		$usersquery = $this -> db -> get_where('jely_user_profile', array('UserId' => $id));
+	function viewRecords() {
+		try {
+			$query = $this -> em -> createQuery('SELECT u FROM models\Entities\E_Jely_Users u');
+			$this -> users = $query -> getArrayResult();
+			// array of User objects
 
-		if ($usersquery -> num_rows() > 0) {
-			foreach ($usersquery->result() as $row) {
-				$data[] = $row;
-			}
-			return $data;
-		} else {
-			$data['id'] = $id;
-			redirect('addprofile/', $data);
+		} catch(exception $ex) {
+			//ignore
+			//$ex->getMessage();
 		}
+		return $this -> users;
 	}
 
-	function getUserList() {
-		$usersquery = $this -> db -> get('users');
+	function deactivateRecord() {
 
-		if ($usersquery -> num_rows() > 0) {
-			foreach ($usersquery->result() as $row) {
-				$data[] = $row;
-			}
-			return $data;
+		try {
+			$query = $this -> em -> createQuery('UPDATE models\Entities\E_Jely_Users u SET u.lastName = "Ngubia"');
+			$query -> execute();
+			// array of User objects
+
+		} catch(exception $ex) {
+			//ignore
+			$ex -> getMessage();
 		}
+
 	}
 
-}
-?>
+}//end of class M_SystemUser)

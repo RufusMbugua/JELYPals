@@ -15,7 +15,7 @@ namespace models\Entities;
 	private $jelyUserID;
 	
    /**
-	* @Column(name="jelyUserSurname", type="string",length=45, nullable=true)
+	* @Column(name="jelyUsername", type="string",length=45, nullable=true)
 	* */
 	private $jelyUsername;
 	
@@ -58,7 +58,7 @@ namespace models\Entities;
 	private $jelyUserPersonID;
 	
    /**
-	* @Column(name="createdAt", type="time", nullable=true)
+	* @Column(name="createdAt", type="string", nullable=true)
 	* */
 	private $createdAt;
 	

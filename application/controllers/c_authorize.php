@@ -17,26 +17,23 @@ class C_Authorize extends CI_Controller {
 		$this -> load -> view('template', $data);
 	}
 
-	function loginUser() {
-		//Field validation succeeded.  Validate against database
-		$username = $this -> input -> post('username');
-		$password = $this -> input -> post('password');
+	public function loginUser() {
+		$this -> m_users -> getUser();
+		if ($this -> m_users -> isUser == 'true') {
+			/*create session data*/
+			$newdata = array('userRights' => $this -> m_users -> userRights, 'username' => $this -> m_users -> username, 'logged_in' => TRUE);
+			$this -> session -> set_userdata($newdata);
 
-		//query the database
-		$result = $this -> m_users -> loginUser($username, $password);
+			redirect(base_url() . 'C_front/home', 'refresh');
 
-		if ($result) {
-			$sess_array = array();
-			foreach ($result as $row) {
-
-				$sess_array = array('id' => $row -> jelyAdminID, 'username' => $row -> jelyAdminName);
-				$this -> session -> set_userdata('logged_in', $sess_array);
-				$this->load->view('home');
-			}
-			return TRUE;
 		} else {
-			$this -> form_validation -> set_message('check_database', 'Invalid username or password');
-			return false;
+
+			#use an ajax request and not a whole refresh
+			$data['message'] = "Wrong Username";
+			$data['messageType'] = "error";
+			$data['title'] = "Login";
+			$data['viewName'] = "Login";
+			$this -> load -> view('template', $data);
 		}
 	}
 

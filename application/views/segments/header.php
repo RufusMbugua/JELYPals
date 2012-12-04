@@ -18,19 +18,39 @@
 
 		context.beginPath();
 		context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-		context.fillStyle = "purple";
+		context.fillStyle = "green";
 		context.fill();
 		context.lineWidth = 5;
-		context.strokeStyle = "green";
+		context.strokeStyle = "purple";
 		context.stroke();
-		context.font="2em Quicksand";
+		context.font = "2em Quicksand";
 		context.textAlign = "center";
 		context.fillStyle = "#000000";
 		context.fillText("JELY", centerX, centerY);
-		context.font="1.2em Quicksand";
-		context.fillText("Pals",centerX,centerY+20);
+		context.font = "1.2em Quicksand";
+		context.fillText("Pals", centerX, centerY + 20);
 	};
-
+	$().ready(function() {
+		//var option=' ';
+		$('.viewUsers').hide();
+		$('.addUsers').hide();
+		$('.users').change(function (){			
+			var option = $('select.users').val();
+			if(option=='View Users'){
+				$('.viewUsers').show();
+				$('.addUsers').hide();
+			}
+			else{
+				$('.viewUsers').hide();
+				$('.addUsers').hide();
+			}
+		});
+		
+		$('.addUser').click(function (){	
+			$('.viewUsers').hide();
+			$('.addUsers').show();
+		});
+	});
     </script>
 		<title><?php echo $title; ?></title>
 	</head>
